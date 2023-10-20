@@ -1,3 +1,5 @@
+package org.smartess.proxy;
+
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
@@ -52,7 +54,11 @@ public class Engine {
         ProcessInverterData procesor = new ProcessInverterData(this);
         pool.execute(procesor);
 
-        Thread.currentThread().sleep(5000);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // test();
     }
 

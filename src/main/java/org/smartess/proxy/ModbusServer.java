@@ -1,4 +1,5 @@
-import java.io.BufferedInputStream;
+package org.smartess.proxy;
+// import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,11 +31,11 @@ public class ModbusServer implements Runnable {
                 this.close=false;
                 while (true) {
                     while (in.available() == 0) {
-                        Thread.currentThread().sleep(100);
+                        Thread.sleep(100);
                         if (close)
                             break;
                     }
-                    Thread.currentThread().sleep(100);
+                    Thread.sleep(100);
                     if (close)
                         break;
                     byte[] data = in.readNBytes(in.available());
@@ -60,7 +61,7 @@ public class ModbusServer implements Runnable {
             String time = new Timestamp(System.currentTimeMillis()).toString();
             System.out.println(time + " - Waiting for node ...");
             while (node == null)
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
         }
         try {
             if (this.node.getOutputStream() == null) {

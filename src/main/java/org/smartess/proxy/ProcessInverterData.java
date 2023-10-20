@@ -1,4 +1,6 @@
-import java.nio.ByteBuffer;
+package org.smartess.proxy;
+
+// import java.nio.ByteBuffer;
 
 public class ProcessInverterData implements Runnable {
 
@@ -28,7 +30,7 @@ public class ProcessInverterData implements Runnable {
         while (true)
             try {
                 while (engine.lastData == null || engine.lastData.length == 0)
-                    Thread.currentThread().sleep(100);
+                    Thread.sleep(100);
                 byte[] data = engine.lastData;
                 String hex = Engine.bytesToHex(data);
                 if (data[2] == 0x09 && data[3] == 0x25) {

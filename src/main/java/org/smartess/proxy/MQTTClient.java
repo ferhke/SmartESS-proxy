@@ -1,6 +1,8 @@
+package org.smartess.proxy;
+
 import java.sql.Timestamp;
 import java.util.UUID;
-import java.util.concurrent.Callable;
+// import java.util.concurrent.Callable;
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -24,7 +26,7 @@ public class MQTTClient implements Runnable, MqttCallback {
 
     public MQTTClient(Engine engine) throws Exception {
         this.engine = engine;
-        this.prefix = engine.mqttTopic;
+        this.prefix = Engine.mqttTopic;
         connect();
 
     }
@@ -38,23 +40,23 @@ public class MQTTClient implements Runnable, MqttCallback {
             String publisherId = UUID.randomUUID().toString();
             MemoryPersistence persistence = new MemoryPersistence();
             this.client = new MqttClient(
-                    "tcp://" + engine.mqttServer + ":" + engine.mqttPort,
+                    "tcp://" + Engine.mqttServer + ":" + Engine.mqttPort,
                     publisherId, persistence);
             MqttConnectOptions options = new MqttConnectOptions();
-            if (engine.enableMqttAuth) {
-                options.setUserName(engine.mqttUser);
-                options.setPassword(engine.mqttPass.toCharArray());
+            if (Engine.enableMqttAuth) {
+                options.setUserName(Engine.mqttUser);
+                options.setPassword(Engine.mqttPass.toCharArray());
             }
             options.setAutomaticReconnect(true);
             options.setCleanSession(true);
             options.setConnectionTimeout(10);
             client.connect(options);
             while (!client.isConnected())
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
             String time = new Timestamp(System.currentTimeMillis()).toString();
             System.out.println(time + " - MQTT connected");
             client.setCallback(this);
-            client.subscribe(engine.mqttTopic + "Set/#");
+            client.subscribe(Engine.mqttTopic + "Set/#");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,30 +102,30 @@ public class MQTTClient implements Runnable, MqttCallback {
 
         if (topic.contains("chargeState")) {
             if (msg.equals("3")) {
-                engine.nsrv.sendData(
-                        engine.hexStringToByteArray(this.chargeSolarOnly));
-                String time = new Timestamp(System.currentTimeMillis())
-                        .toString();
-                System.out.println(time + " - Server: " + chargeSolarOnly);
+            engine.nsrv.sendData(
+                Engine.hexStringToByteArray(MQTTClient.chargeSolarOnly));
+            String time = new Timestamp(System.currentTimeMillis())
+                .toString();
+            System.out.println(time + " - Server: " + MQTTClient.chargeSolarOnly);
             } else {
-                engine.nsrv.sendData(
-                        engine.hexStringToByteArray(this.chargeSolarUtility));
-                String time = new Timestamp(System.currentTimeMillis())
-                        .toString();
-                System.out.println(time + " - Server: " + chargeSolarUtility);
+            engine.nsrv.sendData(
+                Engine.hexStringToByteArray(MQTTClient.chargeSolarUtility));
+            String time = new Timestamp(System.currentTimeMillis())
+                .toString();
+            System.out.println(time + " - Server: " + MQTTClient.chargeSolarUtility);
             }
         } else if (topic.contains("loadState")) {
             if (msg.equals("2")) {
-                engine.nsrv.sendData(engine.hexStringToByteArray(this.loadSBU));
-                String time = new Timestamp(System.currentTimeMillis())
-                        .toString();
-                System.out.println(time + " - Server: " + loadSBU);
+            engine.nsrv.sendData(Engine.hexStringToByteArray(MQTTClient.loadSBU));
+            String time = new Timestamp(System.currentTimeMillis())
+                .toString();
+            System.out.println(time + " - Server: " + MQTTClient.loadSBU);
             } else {
-                engine.nsrv.sendData(
-                        engine.hexStringToByteArray(this.loadUtility));
-                String time = new Timestamp(System.currentTimeMillis())
-                        .toString();
-                System.out.println(time + " - Server: " + loadUtility);
+            engine.nsrv.sendData(
+                Engine.hexStringToByteArray(MQTTClient.loadUtility));
+            String time = new Timestamp(System.currentTimeMillis())
+                .toString();
+            System.out.println(time + " - Server: " + MQTTClient.loadUtility);
             }
         } else {
             String time = new Timestamp(System.currentTimeMillis()).toString();

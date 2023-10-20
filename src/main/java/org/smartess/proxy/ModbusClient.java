@@ -1,9 +1,11 @@
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
+package org.smartess.proxy;
+
+// import java.io.BufferedInputStream;
+// import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.ServerSocket;
+// import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Timestamp;
 
@@ -19,14 +21,14 @@ public class ModbusClient implements Runnable {
     public void run() {
         while (true) {
             try {
-                srv=new Socket(engine.realModbusServer,502);
+                srv=new Socket(Engine.realModbusServer,502);
                 String time = new Timestamp(System.currentTimeMillis()).toString();
                 System.out.println(time + " - Connected to server "
-                        + srv.getInetAddress().getHostAddress());
+                    + srv.getInetAddress().getHostAddress());
                 InputStream in=srv.getInputStream();
                 while (true) {
                     while (in.available() == 0) {
-                        Thread.currentThread().sleep(100);
+                        Thread.sleep(100);
                     }
                     byte[] data=in.readNBytes(in.available());
                     String hex=Engine.bytesToHex(data);
@@ -48,7 +50,7 @@ public class ModbusClient implements Runnable {
         if(this.srv==null) {
             String time = new Timestamp(System.currentTimeMillis()).toString();
             System.out.println(time + " - Waiting for server ...");
-            while(srv==null) Thread.currentThread().sleep(100);
+            while(srv==null) Thread.sleep(100);
         }
         try {
             if(this.srv.getOutputStream()==null) return -1;

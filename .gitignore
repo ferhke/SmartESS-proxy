@@ -1,0 +1,60 @@
+# Fichiers compilés
+*.class
+
+# Fichiers de package
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Fichiers générés par l'IDE (IntelliJ, Eclipse, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+
+# Dossiers de build et de dépendances
+bin/
+target/
+build/
+out/
+dist/
+
+# Maven - Répertoire de cache local
+repository/
+
+# Gradle - Répertoire de cache local et fichiers de build
+.gradle/
+gradlew
+gradlew.bat
+gradle-wrapper.jar
+
+# Fichiers temporaires et logs
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.lastUpdated
+
+# Fichiers OS spécifiques
+.DS_Store
+Thumbs.db
+
+# Autres fichiers et dossiers à ignorer
+*.pid
+*.dump
+*.out
+*.pid.lock
+
+# Fichiers de configuration spécifiques à l'environnement
+# À noter : il est souvent recommandé de ne pas versionner les fichiers de configuration spécifiques à un environnement.
+# À la place, vous pouvez versionner un fichier d'exemple et ignorer le fichier réel.
+#*.properties
+#*.yml
+#*.yaml
