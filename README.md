@@ -1,5 +1,3 @@
----
-
 # SmartESS-proxy
 
 **SmartESS-proxy** is a bridge between the VictorMax WiFi Plug Pro and MQTT, designed to facilitate data transmission to Home Assistant (HASS) in addition to the native SmartESS cloud.
@@ -58,4 +56,3 @@ run it with `docker run -p 502:502 smartess-proxy:latest` or `docker-conpose up`
 
 > **Note**: The `fakeClient` has also been adapted.
 
----
