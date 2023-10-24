@@ -1,25 +1,12 @@
-FROM amazoncorretto:11-alpine-jdk as MAVEN_BUILD
-
-# Java arguments
-RUN apk add --no-cache \
-    git \
-    maven \
-    bash \
-    curl wget
-
-COPY pom.xml /build/
-COPY src /build/
-
-WORKDIR /build/
-RUN mvn package -Dmaven.test.skip=true
-
-
 FROM amazoncorretto:11
 
+ARG tag=0.0.14-SNAPSHOT
+ENV tag=${tag}
+ENV CLASSPATH=/app/smartess-proxy.jar
 WORKDIR /app
-COPY --from=MAVEN_BUILD /build/target/smartess-proxy-0.0.1-SNAPSHOT-jar-with-dependencies.jar /app/
+COPY ./target/smartess-proxy-${tag}-jar-with-dependencies.jar /app/smartess-proxy.jar
 COPY ./bin/conf.ini /app
 
 EXPOSE 502
-
-CMD ["java","-jar" ,"/app/smartess-proxy-0.0.1-SNAPSHOT-jar-with-dependencies.jar"]
+EXPOSE 9909
+ENTRYPOINT [ "bash", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -cp org.smartess.proxy.Engine -jar smartess-proxy.jar" ]

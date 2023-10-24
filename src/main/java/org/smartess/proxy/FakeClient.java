@@ -1,14 +1,5 @@
 package org.smartess.proxy;
 
-// import java.io.BufferedInputStream;
-// import java.io.BufferedWriter;
-// import java.io.IOException;
-// import java.io.InputStream;
-// import java.io.OutputStream;
-// import java.net.ServerSocket;
-// import java.net.Socket;
-import java.sql.Timestamp;
-
 public class FakeClient extends ModbusClient {
 
     public FakeClient(Engine engine) throws Exception {
@@ -19,9 +10,10 @@ public class FakeClient extends ModbusClient {
     private Engine engine;
     // private Socket srv;
 
-    private static String cfg = "3D0A0001000EFF020102030405080C0E191A2041";
-    // private static String ping = "3D0B0001000AFF011609190F00350023";
-    private static String getData = "3D0C00010003001100";
+    private short cnt = 0;
+    private static String cfg = "00000001000AFF04050311C20010E142";
+    // private static String ping = "00000001000AFF01170A160519350023";
+    private static String getData = "00000001000AFF0405031195002D9143";
 
     public void run() {
         while (true) {
@@ -29,11 +21,15 @@ public class FakeClient extends ModbusClient {
                 sendMsgToClient(cfg);
                 // int cnt = 0;
                 while (true) {
-                    int res = sendMsgToClient(getData);
+                    byte[] cntBytes=new byte[]{(byte)(cnt>>>8),(byte)(cnt&0xFF)};
+                    int res = sendMsgToClient(Engine.bytesToHex(cntBytes) + getData.substring(4));                   
+                    if (cnt >= 0xFFFF)
+                        cnt = 0; 
+                    else 
+                        cnt++;
                     if (res == -1)
                         break;
                     Thread.sleep(Engine.fakeClientUpdateFrequency * 1000);
-
                 }
 
             } catch (Exception e) {
@@ -42,16 +38,17 @@ public class FakeClient extends ModbusClient {
             }
         }
     }
+ 
     public int sendData(byte[] data) throws InterruptedException {
         return 0;
     }
+ 
     private int sendMsgToClient(String msg) throws InterruptedException {
         while (engine.nsrv == null || engine.nsrv.node == null)
             Thread.sleep(100);
         byte[] data = Engine.hexStringToByteArray(msg);
         int res = engine.nsrv.sendData(data);
-        String time = new Timestamp(System.currentTimeMillis()).toString();
-        System.out.println(time + " - Server: " + msg);
+        Engine.logger.info("Server: " + msg);
         return res;
     }
 

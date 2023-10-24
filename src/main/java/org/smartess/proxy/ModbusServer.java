@@ -1,11 +1,10 @@
 package org.smartess.proxy;
-// import java.io.BufferedInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Timestamp;
 
 public class ModbusServer implements Runnable {
 
@@ -23,9 +22,7 @@ public class ModbusServer implements Runnable {
             ss = new ServerSocket(502);
             while (true) {
                 node = ss.accept();
-                String time = new Timestamp(System.currentTimeMillis())
-                        .toString();
-                System.out.println(time + " - Connected node "
+                Engine.logger.info("Connected node "
                         + node.getInetAddress().getHostAddress());
                 InputStream in = node.getInputStream();
                 this.close=false;
@@ -40,8 +37,7 @@ public class ModbusServer implements Runnable {
                         break;
                     byte[] data = in.readNBytes(in.available());
                     String hex = Engine.bytesToHex(data);
-                    time = new Timestamp(System.currentTimeMillis()).toString();
-                    System.out.println(time + " - Node: " + hex);
+                    Engine.logger.info("Node: " + hex);
                     int res=engine.ncli.sendData(data);
                     // engine.mqtt.sendMsg("data", hex);
                     engine.lastData = data;
@@ -58,8 +54,7 @@ public class ModbusServer implements Runnable {
 
     public int sendData(byte[] data) throws InterruptedException {
         if (this.node == null) {
-            String time = new Timestamp(System.currentTimeMillis()).toString();
-            System.out.println(time + " - Waiting for node ...");
+            Engine.logger.info("Waiting for node ...");
             while (node == null)
                 Thread.sleep(100);
         }

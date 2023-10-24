@@ -1,25 +1,51 @@
 package org.smartess.proxy;
 
-// import java.nio.ByteBuffer;
+import java.sql.Timestamp;
 
 public class ProcessInverterData implements Runnable {
 
     private Engine engine;
-    private short modeIdx = 14;
-    private short acVoltageIdx = 16;
-    private short acFrequencyIdx = 18;
-    private short pvVoltageIdx = 20;
-    private short pvPowerIdx = 22;
-    private short batteryVoltageIdx = 24;
-    private short batteryChargedIdx = 26;
-    private short batteryChargingCurrIdx = 28;
-    private short batteryDisChargingCurrIdx = 30;
-    private short outputVoltageIdx = 32;
-    private short outputFrequencyIdx = 34;
-    private short outputPowerIdx = 38;
-    private short outputLoadIdx = 40;
+    private short modeIdx = 11;
+    private short acVoltageIdx = 13;
+    private short acFrequencyIdx = 15;
+    private short pvVoltageIdx = 17;
+    private short pvPowerIdx = 19;
+    private short batteryVoltageIdx = 21;
+    private short batteryChargedIdx = 23;
+    private short batteryChargingCurrIdx = 25;
+    private short batteryDisChargingCurrIdx = 27;
+    private short outputVoltageIdx = 29;
+    private short outputFrequencyIdx = 31;
+    private short outputApparentPowerIdx = 33;
+    private short outputPowerIdx = 35;
+    private short outputLoadIdx = 37;
     private short chargeStateIdx=84;
     private short loadStateIdx=86;
+    private short mainCpuVersionIdx=45;
+    private short secondaryCpuVersionIdx=47;
+
+    public Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    public Timestamp lastTimestamp;
+    public double batteryVoltage;
+    public int batteryCharged;
+    public double batteryChargingCurr;
+    public double batteryDisChargingCurr;
+    public double outputVoltage;
+    public double outputFrequency;
+    public double outputApparentPower;
+    public int outputPower;
+    public int outputLoad;
+    public double acVoltage;
+    public double acFrequency;
+    public double pvVoltage;
+    public int pvPower;
+    public int mode;
+    public int chargeState;
+    public int loadState;
+    public double mainCpuVersion;
+    public double secondaryCpuVersion;
+    public double pvEnergyTick;
+    public double outputEnergyTick;
 
 
     public ProcessInverterData(Engine engine) {
@@ -29,49 +55,86 @@ public class ProcessInverterData implements Runnable {
     public void run() {
         while (true)
             try {
-                while (engine.lastData == null || engine.lastData.length == 0)
+                while (engine.lastData == null || engine.lastData.length == 0) 
                     Thread.sleep(100);
                 byte[] data = engine.lastData;
+                lastTimestamp = timestamp;
+                timestamp = new Timestamp(System.currentTimeMillis());
+                final long timeDiff = timestamp.getTime() - lastTimestamp.getTime();
                 String hex = Engine.bytesToHex(data);
-                if (data[2] == 0x09 && data[3] == 0x25) {
-                    double batteryVoltage = getData(data, batteryVoltageIdx,
+                if (data[2] == 0x00 && data[3] == 0x01 && data[4] == 0x00 && data[5] == 0x61 ) {
+                    // message type 0xXXXX000106
+                    batteryVoltage = getData(data, batteryVoltageIdx,
                             10);
                     engine.mqtt.sendMsg("batteryVoltage", batteryVoltage);
-                    int batteryCharged = getData(data, batteryChargedIdx, 1,
+                    batteryCharged = getData(data, batteryChargedIdx, 1,
                             true);
                     engine.mqtt.sendMsg("batteryCharged", batteryCharged);
-                    double batteryChargingCurr = getData(data,
+                    batteryChargingCurr = getData(data,
                             batteryChargingCurrIdx, 10);
                     engine.mqtt.sendMsg("batteryChargingCurr",
                             batteryChargingCurr);
-                    double batteryDisChargingCurr = getData(data,
+                    batteryDisChargingCurr = getData(data,
                             batteryDisChargingCurrIdx, 10);
                     engine.mqtt.sendMsg("batteryDisChargingCurr",
                             batteryDisChargingCurr);
-                    double outputVoltage = getData(data, outputVoltageIdx, 10);
+                    outputVoltage = getData(data, outputVoltageIdx, 10);
                     engine.mqtt.sendMsg("outputVoltage", outputVoltage);
-                    double outputFrequency = getData(data, outputFrequencyIdx,
+                    outputFrequency = getData(data, outputFrequencyIdx,
                             10);
                     engine.mqtt.sendMsg("outputFrequency", outputFrequency);
-                    int outputPower = getData(data, outputPowerIdx, 1, true);
+                    outputApparentPower = getData(data, outputApparentPowerIdx, 1); 
+                    engine.mqtt.sendMsg("outputApparentPower", outputApparentPower);
+                    final int lastOutputPower = outputPower;
+                    outputPower = getData(data, outputPowerIdx, 1, true);
                     engine.mqtt.sendMsg("outputPower", outputPower);
-                    int outputLoad = getData(data, outputLoadIdx, 1, true);
+                    outputEnergyTick = (outputPower + lastOutputPower) / 2 * timeDiff / 1000.0 / 3600.0;
+                    engine.mqtt.sendMsg("outputEnergyTick", outputEnergyTick);
+                    outputLoad = getData(data, outputLoadIdx, 1, true);
                     engine.mqtt.sendMsg("outputLoad", outputLoad);
-                    double acVoltage = getData(data, acVoltageIdx, 10);
+                    acVoltage = getData(data, acVoltageIdx, 10);
                     engine.mqtt.sendMsg("acVoltage", acVoltage);
-                    double acFrequency = getData(data, acFrequencyIdx, 10);
+                    acFrequency = getData(data, acFrequencyIdx, 10);
                     engine.mqtt.sendMsg("acFrequency", acFrequency);
-                    double pvVoltage = getData(data, pvVoltageIdx, 10);
+                    pvVoltage = getData(data, pvVoltageIdx, 10);
                     engine.mqtt.sendMsg("pvVoltage", pvVoltage);
-                    int pvPower = getData(data, pvPowerIdx, 1, true);
+                    mainCpuVersion = getData(data, mainCpuVersionIdx, 1);
+                    engine.mqtt.sendMsg("mainCpuVersion", mainCpuVersion);
+                    secondaryCpuVersion = getData(data, secondaryCpuVersionIdx, 1);
+                    engine.mqtt.sendMsg("secondaryCpuVersion", secondaryCpuVersion);
+                    final int lastPvPower = pvPower;
+                    pvPower = getData(data, pvPowerIdx, 1, true);
                     engine.mqtt.sendMsg("pvPower", pvPower);
-                    int mode = getData(data, modeIdx, 1, true);
+                    pvEnergyTick = (pvPower + lastPvPower) / 2 * timeDiff / 1000.0 / 3600.0;
+                    engine.mqtt.sendMsg("pvEnergyTick", pvEnergyTick);
+                    mode = getData(data, modeIdx, 1, true);
                     engine.mqtt.sendMsg("mode", mode);
-                    int chargeState = getData(data, chargeStateIdx, 1, true);
+                    chargeState = getData(data, chargeStateIdx, 1, true);
                     engine.mqtt.sendMsg("chargeState", chargeState);
-                    int loadState = getData(data, loadStateIdx, 1, true);
+                    loadState = getData(data, loadStateIdx, 1, true);
                     engine.mqtt.sendMsg("loadState", loadState);
-                }if (data[2] == 0x00 && data[3] == 0x01) {
+                    Engine.logger.info("{ batteryVoltage: " + batteryVoltage
+                        + " ,batteryCharged: " + batteryCharged
+                        + " ,batteryChargingCurr: " + batteryChargingCurr
+                        + " ,batteryDisChargingCurr: " + batteryDisChargingCurr
+                        + " ,outputVoltage: " + outputVoltage
+                        + " ,outputFrequency: " + outputFrequency
+                        + " ,outputApparentPower: " + outputApparentPower
+                        + " ,outputPower: " + outputPower
+                        + " ,outputEnergyTick: " + outputEnergyTick
+                        + " ,outputLoad: " + outputLoad
+                        + " ,acVoltage: " + acVoltage
+                        + " ,acFrequency: " + acFrequency
+                        + " ,pvVoltage: " + pvVoltage
+                        + " ,pvPower: " + pvPower
+                        + " ,pvEnergyTick: " + pvEnergyTick
+                        + " ,mainCpuVersion: " + mainCpuVersion
+                        + " ,secondaryCpuVersion: " + secondaryCpuVersion
+                        + " ,mode: " + mode
+                        + " ,chargeState: " + chargeState
+                        + " ,loadState: " + loadState + " }"
+                    );                          
+                } if (data[2] == 0x00 && data[3] == 0x01 && data[4] == 0x00 && data[5] == 0x27 ) {
                     int chargeState=-1;
                     int loadState=-1;
                     if(hex.equals(MQTTClient.chargeSolarOnly)) chargeState=3;
@@ -80,7 +143,23 @@ public class ProcessInverterData implements Runnable {
                     else if(hex.equals(MQTTClient.loadUtility)) loadState=0;
                     if(chargeState!=-1) engine.mqtt.sendMsg("chargeState", chargeState);
                     if(loadState!=-1) engine.mqtt.sendMsg("loadState", loadState);
-
+                    Engine.logger.info("chargeState: " + chargeState
+                        + " loadState: " + loadState);
+                } if (data[2] == 0x00 && data[3] == 0x01 && data[4] == 0x01) {
+                    int chargeState=-1;
+                    int loadState=-1;
+                    if(hex.equals(MQTTClient.chargeSolarOnly)) chargeState=3;
+                    else if(hex.equals(MQTTClient.chargeSolarUtility)) chargeState=2;
+                    else if(hex.equals(MQTTClient.loadSBU)) loadState=2;
+                    else if(hex.equals(MQTTClient.loadUtility)) loadState=0;
+                    if(chargeState!=-1) engine.mqtt.sendMsg("chargeState", chargeState);
+                    if(loadState!=-1) engine.mqtt.sendMsg("loadState", loadState);
+                    Engine.logger.info("chargeState: " + chargeState
+                        + " loadState: " + loadState); 
+                } if  (data[2] == 0x01 && data[3] == 0x02 && data[4] == 0x00 && data[5] == 0x10) {
+                    Engine.logger.info("Ping: " + hex);
+                } else {
+                    Engine.logger.info("Unknown data: " + hex);
                 }
                 engine.lastData = null;
             } catch (Exception e) {

@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  smartess-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smartess-proxy:latest
+    ports:
+      - "502:502"
+    restart: always
+    volumes:
+      - ./conf.ini:/app/conf.ini:ro

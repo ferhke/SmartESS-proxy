@@ -1,28 +1,30 @@
 package tester;
-import java.nio.ByteBuffer;
 
 public class testDataExtract {
-    private short modeIdx = 14;
-    private short acVoltageIdx = 16;
-    private short acFrequencyIdx = 18;
-    private short pvVoltageIdx = 20;
-    private short pvPowerIdx = 22;
-    private short batteryVoltageIdx = 24;
-    private short batteryChargedIdx = 26;
-    private short batteryChargingCurrIdx = 28;
-    private short batteryDisChargingCurrIdx = 30;
-    private short outputVoltageIdx = 32;
-    private short outputFrequencyIdx = 34;
-    private short outputPowerIdx = 38;
-    private short outputLoadIdx = 40;
+    private short modeIdx = 11;
+    private short acVoltageIdx = 13;
+    private short acFrequencyIdx = 15;
+    private short pvVoltageIdx = 17;
+    private short pvPowerIdx = 19;
+    private short batteryVoltageIdx = 21;
+    private short batteryChargedIdx = 23;
+    private short batteryChargingCurrIdx = 25;
+    private short batteryDisChargingCurrIdx = 27;
+    private short outputVoltageIdx = 29;
+    private short outputFrequencyIdx = 31;
+    private short outputApparentPowerIdx = 33;
+    private short outputPowerIdx = 35;
+    private short outputLoadIdx = 37;
     private short chargeStateIdx=84;
     private short loadStateIdx=86;
+    private short mainCpuVersionIdx=45;
+    private short secondaryCpuVersionIdx=47;
 
 
     public testDataExtract() {
-        String hex = "2B270925008205110000119511D10400CE08F301B90001007C00420000000000CE08F301100000000100010072B20000C1A200000100DC05DC05E60006007800E600F401060000000000F9231601D70F72006501020001000000020000003C00E6001E00740087007E007D0064008D003C0078001E0062ECE90E010000004A000000000000000000";
+        String hex = "63BC00010061FF0405035A04001109F301BE11AB00D8000000000000001109F3019C0847081500150000000000750900000200D827D827E6002C00E001E600F4012C0000000001F923D200A80C1900DC01020002000000020000003C00E6003C00E0011C02A396";
         byte[] data = hexStringToByteArray(hex);
-        if (data[2] == 0x09 && data[3] == 0x25) {
+        if (data[2] == 0x00 && data[3] == 0x01 && data[4] == 0x00 && data[5] == 0x61) {
             double batteryVoltage = getData(data, batteryVoltageIdx, 10);
             System.out.println("batteryVoltage: " + batteryVoltage);
             int batteryCharged = getData(data, batteryChargedIdx, 1, true);

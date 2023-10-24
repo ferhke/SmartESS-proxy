@@ -1,0 +1,156 @@
+mqtt:
+  sensor:
+    - name: "Battery Charged"
+      state_topic: "solar/Inverter/batteryCharged"
+      unit_of_measurement: "%"
+      unique_id: "victormax_inverter_battery_charged"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Battery Charging Current"
+      state_topic: "solar/Inverter/batteryChargingCurr"
+      unit_of_measurement: "A"
+      unique_id: "victormax_inverter_battery_charging_curr"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Battery Discharging Current"
+      state_topic: "solar/Inverter/batteryDisChargingCurr"
+      unit_of_measurement: "A"
+      unique_id: "victormax_inverter_battery_discharging_curr"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Output Voltage"
+      state_topic: "solar/Inverter/outputVoltage"
+      unit_of_measurement: "V"
+      unique_id: "victormax_inverter_output_voltage"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Output Frequency"
+      state_topic: "solar/Inverter/outputFrequency"
+      unit_of_measurement: "Hz"
+      unique_id: "victormax_inverter_output_frequency"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Output Apparent Power"
+      state_topic: "solar/Inverter/outputApparentPower"
+      unit_of_measurement: "VA"
+      unique_id: "victormax_inverter_output_apparent_power"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Output Power"
+      state_topic: "solar/Inverter/outputPower"
+      unit_of_measurement: "W"
+      unique_id: "victormax_inverter_output_power"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Output Load"
+      state_topic: "solar/Inverter/outputLoad"
+      unit_of_measurement: "%"
+      unique_id: "victormax_inverter_output_load"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "AC Frequency"
+      state_topic: "solar/Inverter/acFrequency"
+      unit_of_measurement: "Hz"
+      unique_id: "victormax_inverter_ac_frequency"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "PV Voltage"
+      state_topic: "solar/Inverter/pvVoltage"
+      unit_of_measurement: "V"
+      unique_id: "victormax_inverter_pv_voltage"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "PV Power"
+      state_topic: "solar/Inverter/pvPower"
+      unit_of_measurement: "W"
+      unique_id: "victormax_inverter_pv_power"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+        
+    - name: "Main CPU Version"
+      state_topic: "solar/Inverter/mainCpuVersion"
+      unique_id: "victormax_inverter_main_cpu_version"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Secondary CPU Version"
+      state_topic: "solar/Inverter/secondaryCpuVersion"
+      unique_id: "victormax_inverter_secondary_cpu_version"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Mode"
+      state_topic: "solar/Inverter/mode"
+      unique_id: "victormax_inverter_mode"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Charge State"
+      state_topic: "solar/Inverter/chargeState"
+      unique_id: "victormax_inverter_charge_state"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"
+
+    - name: "Load State"
+      state_topic: "solar/Inverter/loadState"
+      unique_id: "victormax_inverter_load_state"
+      device:
+        identifiers: "victormax_inverter"
+        name: "VictorMAX Inverter"
+        model: "WiFi Plug Pro"
+        manufacturer: "NEXT"

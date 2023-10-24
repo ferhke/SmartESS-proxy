@@ -6,27 +6,36 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Engine {
 
     static boolean fakeClient = true;
-    static String mqttServer = "172.16.2.1";
+    static String mqttServer = "homeassistant.local";
     static boolean enableMqttAuth=false;
     static String mqttUser="";
     static String mqttPass="";
     static int mqttPort = 1883;
-    static String mqttTopic = "paxyhome/Inverter/";
-    static int fakeClientUpdateFrequency = 10; // 10 seconds
+    static String mqttTopic = "solar/Inverter/";
+    static int fakeClientUpdateFrequency = 15; // 10 seconds
     static String realModbusServer="47.242.188.205";
 
 
+    protected static final Logger logger = LogManager.getLogger();
+    
     static Executor pool = Executors.newFixedThreadPool(4);
     private static final byte[] HEX_ARRAY = "0123456789ABCDEF"
             .getBytes(StandardCharsets.US_ASCII);
     ModbusServer nsrv;
     ModbusClient ncli;
     MQTTClient mqtt;
+    ProcessInverterData procesor;
+    PrometheusExporter exporter;
+
 
     byte[] lastData;
+
 
     public Engine() throws Exception {
 
@@ -51,9 +60,10 @@ public class Engine {
         pool.execute(ncli);
         mqtt = new MQTTClient(this);
         pool.execute(mqtt);
-        ProcessInverterData procesor = new ProcessInverterData(this);
+        procesor = new ProcessInverterData(this);
         pool.execute(procesor);
-
+        exporter = new PrometheusExporter(this);
+        pool.execute(exporter);
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {

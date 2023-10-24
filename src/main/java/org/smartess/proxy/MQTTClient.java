@@ -1,8 +1,6 @@
 package org.smartess.proxy;
 
-import java.sql.Timestamp;
 import java.util.UUID;
-// import java.util.concurrent.Callable;
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -53,8 +51,7 @@ public class MQTTClient implements Runnable, MqttCallback {
             client.connect(options);
             while (!client.isConnected())
                 Thread.sleep(100);
-            String time = new Timestamp(System.currentTimeMillis()).toString();
-            System.out.println(time + " - MQTT connected");
+            Engine.logger.info("MQTT connected");
             client.setCallback(this);
             client.subscribe(Engine.mqttTopic + "Set/#");
 
@@ -104,35 +101,24 @@ public class MQTTClient implements Runnable, MqttCallback {
             if (msg.equals("3")) {
             engine.nsrv.sendData(
                 Engine.hexStringToByteArray(MQTTClient.chargeSolarOnly));
-            String time = new Timestamp(System.currentTimeMillis())
-                .toString();
-            System.out.println(time + " - Server: " + MQTTClient.chargeSolarOnly);
+            Engine.logger.info("Server: " + MQTTClient.chargeSolarOnly);
             } else {
             engine.nsrv.sendData(
                 Engine.hexStringToByteArray(MQTTClient.chargeSolarUtility));
-            String time = new Timestamp(System.currentTimeMillis())
-                .toString();
-            System.out.println(time + " - Server: " + MQTTClient.chargeSolarUtility);
+            Engine.logger.info("Server: " + MQTTClient.chargeSolarUtility);
             }
         } else if (topic.contains("loadState")) {
             if (msg.equals("2")) {
             engine.nsrv.sendData(Engine.hexStringToByteArray(MQTTClient.loadSBU));
-            String time = new Timestamp(System.currentTimeMillis())
-                .toString();
-            System.out.println(time + " - Server: " + MQTTClient.loadSBU);
+            Engine.logger.info("Server: " + MQTTClient.loadSBU);
             } else {
             engine.nsrv.sendData(
                 Engine.hexStringToByteArray(MQTTClient.loadUtility));
-            String time = new Timestamp(System.currentTimeMillis())
-                .toString();
-            System.out.println(time + " - Server: " + MQTTClient.loadUtility);
+            Engine.logger.info("Server: " + MQTTClient.loadUtility);
             }
         } else {
-            String time = new Timestamp(System.currentTimeMillis()).toString();
-            System.out.println("\nReceived a Message!" + "\n\tTime:    " + time
-                    + "\n\tTopic:   " + topic + "\n\tMessage: "
-                    + new String(message.getPayload()) + "\n\tQoS:     "
-                    + message.getQos() + "\n");
+            Engine.logger.info("Received a Message! - Topic: " + topic + " - Message: "
+                    + new String(message.getPayload()) + " - QoS: " + message.getQos());
         }
 
     }

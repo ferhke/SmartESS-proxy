@@ -1,28 +1,61 @@
+---
+
 # SmartESS-proxy
-SmartESS (PowMr) to MQTT proxy
 
-Aim of the project is to adopt PowMr WiFi Plug Pro to send data over MQTT to HASS beside SmartESS cloud.
-It is achived by running SmartESS-proxy and poisoning DNS ess.eybond.com to point to the proxy.
+**SmartESS-proxy** is a bridge between the VictorMax WiFi Plug Pro and MQTT, designed to facilitate data transmission to Home Assistant (HASS) in addition to the native SmartESS cloud.
 
-For use without compiling, place content of bin/ to the same folder.
+## Project Objective
 
-Change parameters in conf.ini
+The primary goal of this project is to enable the VictorMax WiFi Plug Pro to transmit data via MQTT to HASS. This is achieved by running the SmartESS-proxy and redirecting the DNS of `ess.eybond.com` to this proxy.
+
+## Getting Started
+
+### Prerequisites
+
+- Java 11
+- Maven
+
+### Compilation
+
+To compile the project, use the following Maven command:
+
+```bash
+mvn package -f "pom.xml"
 ```
+
+This will generate a binary JAR file in target/smartess-proxy-0.0.14-SNAPSHOT-jar-with-dependencies.jar
+
+#### Docker
+Then you can create a container with `docker build . -t smartess-proxy:latest` or `docker-compose.build`
+
+
+### Configuration
+
+Before running the project, modify the parameters in the `conf.ini` file as per your requirements:
+
+```ini
 fakeClient=true
 mqttServer=172.16.2.1
 mqttPort=1883
 enableMqttAuth=false
 mqttUser=
 mqttPass=
-mqttTopic=paxyhome/Inverter/
+mqttTopic=victorMax/Inverter/
 updateFrequency=10
- ```
- 
- Run project with:
- ```
- java -jar SmartESS-proxy.jar
- ```
- 
- FakeClient is initiated by default to prevent data to be sent to SmartESS cloud. If you still want to use SmartESS cloud, set fakeClient to false.
- 
- Project requires org.eclipse.paho.client.mqtt library.
+```
+
+### Execution
+
+To run the project, use the following command:
+
+```bash
+java -jar smartess-proxy-0.0.14-SNAPSHOT-jar-with-dependencies.jar
+```
+
+#### Docker
+run it with `docker run -p 502:502 smartess-proxy:latest` or `docker-conpose up` 
+
+
+> **Note**: The `fakeClient` has also been adapted.
+
+---
