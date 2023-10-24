@@ -1,6 +1,6 @@
 FROM amazoncorretto:11
 
-ARG tag=0.0.14-SNAPSHOT
+ARG tag=0.0.14
 ENV tag=${tag}
 ENV CLASSPATH=/app/smartess-proxy.jar
 WORKDIR /app

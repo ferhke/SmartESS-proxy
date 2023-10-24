@@ -9,7 +9,7 @@ RUN mvn -B package -f /build/pom.xml
 # TODO: fix maven build including dependencies
 FROM amazoncorretto:11
 
-ARG tag=0.0.13-SNAPSHOT
+ARG tag=0.0.14
 ENV tag=${tag}
 ENV CLASSPATH=/app/smartess-proxy.jar
 WORKDIR /app

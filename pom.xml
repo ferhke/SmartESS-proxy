@@ -5,7 +5,7 @@
 
     <groupId>org.smartess.proxy</groupId>
     <artifactId>smartess-proxy</artifactId>
-    <version>0.0.14-SNAPSHOT</version>
+    <version>0.0.14</version>
     <packaging>jar</packaging>
 
     <name>SmartESS Proxy</name>
@@ -95,6 +95,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>org.smartess.proxy.Engine</mainClass>
+                            <artifactId>smartess-proxy</artifactId>
                         </manifest>
                         <manifestEntries>
                             <Multi-Release>true</Multi-Release>
