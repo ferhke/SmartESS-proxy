@@ -29,7 +29,8 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn --batch-mode deploy -s ${{ github.workspace }}/settings.xml
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+    - name: Upload jar to release
+      uses: actions/upload-artifact@v2
+      with:
+        name: smartess-proxy-${{ github.ref }}
+        path: target/smartess-proxy-*.jar
