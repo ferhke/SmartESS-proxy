@@ -1,6 +1,6 @@
 # SmartESS-proxy
 
-**SmartESS-proxy** is a bridge between the VictorMax WiFi Plug Pro and MQTT, designed to facilitate data transmission to Home Assistant (HASS) in addition to the native SmartESS cloud.
+**SmartESS-proxy** is a bridge between the VictorMax WiFi Plug Pro and MQTT, designed to facilitate data transmission to Home Assistant (HASS) or prometheus / grafana in addition to the native SmartESS cloud.
 
 ## Project Objective
 
