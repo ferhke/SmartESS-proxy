@@ -30,7 +30,18 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Upload jar to release
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: smartess-proxy-${{ github.ref_name }}
         path: target/smartess-proxy-*.jar
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: target/smartess-proxy-*.jar
+        tag_name: ${{ github.ref }}
+        body: ${{ github.event.release.body }}
+        draft: false
+        prerelease: false
+        token: ${{ secrets.GITHUB_TOKEN }}
