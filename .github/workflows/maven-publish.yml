@@ -32,5 +32,5 @@ jobs:
     - name: Upload jar to release
       uses: actions/upload-artifact@v2
       with:
-        name: smartess-proxy-${{ github.ref }}
+        name: smartess-proxy-${{ github.ref_name }}
         path: target/smartess-proxy-*.jar
