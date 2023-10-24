@@ -146,7 +146,7 @@ public class PrometheusExporter implements Runnable {
                 mode.set(procesor.mode);
                 chargeState.set(procesor.chargeState);
                 loadState.set(procesor.loadState);
-                cpuVersion.info("mainCpuVersion", Double.toString(procesor.mainCpuVersion), "secondaryCpuVersion", Double.toString(procesor.secondaryCpuVersion));
+                cpuVersion.info("device", "NEXT_VictorMAX","mainCpuVersion", Double.toString(procesor.mainCpuVersion), "secondaryCpuVersion", Double.toString(procesor.secondaryCpuVersion));
             }
 
             try {

@@ -4,7 +4,7 @@ COPY pom.xml /build/
 COPY src /build/
 
 WORKDIR /build/
-RUN mvn package -f /build/pom.xml
+RUN mvn -B package -f /build/pom.xml
 
 # TODO: fix maven build including dependencies
 FROM amazoncorretto:11
