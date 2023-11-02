@@ -5,7 +5,6 @@
 ## Project Objective
 
 The primary goal of this project is to enable the VictorMax WiFi Plug Pro to transmit data via MQTT to HASS. This is achieved by running the SmartESS-proxy and redirecting the DNS of `ess.eybond.com` to this proxy.
-![smartess logo](https://github.com/stefb69/SmartESS-proxy/assets/4223252/f5516ec9-e075-464c-896d-6a6bfc7e1bad)
 
 ## Getting Started
 
