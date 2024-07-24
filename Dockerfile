@@ -4,7 +4,7 @@ ARG tag=0.0.14
 ENV tag=${tag}
 ENV CLASSPATH=/app/smartess-proxy.jar
 WORKDIR /app
-COPY ./target/smartess-proxy-${tag}-jar-with-dependencies.jar /app/smartess-proxy.jar
+COPY ./target/smartess-proxy-${tag}.jar /app/smartess-proxy.jar
 COPY ./bin/conf.ini /app
 
 EXPOSE 502
