@@ -95,7 +95,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>org.smartess.proxy.Engine</mainClass>
-<!--                            <artifactId>smartess-proxy</artifactId>--Ю
+<!--                            <artifactId>smartess-proxy</artifactId>-->
                         </manifest>
                         <manifestEntries>
                             <Multi-Release>true</Multi-Release>
